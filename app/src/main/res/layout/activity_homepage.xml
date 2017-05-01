@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="project.doublepark.doublepark.HomepageActivity">
+    <com.google.android.gms.ads.AdView
+        xmlns:app="http://schemas.android.com/apk/libs/com.google.ads"
+        android:layout_alignParentTop="true"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ads:adUnitId="@string/ads_id"
+        ads:adSize="BANNER"/>
+    <TextView
+        android:id="@+id/textViewHomepage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/enter_car_plate_number"
+        android:textSize="30sp"
+        android:gravity="center"/>
+
+    <EditText
+        android:id="@+id/editText_Search_CarPlateNumber"
+        android:layout_width="340sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:background="@drawable/rounded_edittext"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/prompt_car_plate"
+        android:inputType="textPersonName"
+        android:textSize="28sp"/>
+
+    <Button
+        android:id="@+id/buttonFindCarOwner"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:onClick="findCarOwner"
+        android:background="@drawable/rounded_button"
+        android:text="Enter" />
+
+
+
+</LinearLayout>
+

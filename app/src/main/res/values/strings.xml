@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">Project</string>
+
+    <!-- Strings related to login -->
+    <string name="ads_id">ca-app-pub-5095328269799370/5400958246</string>
+    <string name="prompt_car_plate">Car Plate</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_car_plate">This car plate number is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+
+    <string name="title_activity_first_screen">DoublePark</string>
+    <string name="action_register">Register</string>
+    <string name="prompt_name">Name</string>
+    <string name="register_email">Email</string>
+    <string name="prompt_contact_no">Contact Number</string>
+    <string name="prompt_reenter_password">Reenter Password</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="enter_car_plate_number">Search Car Plate</string>
+    <string name="notify">Notify</string>
+    <string name="action_add_contact">Add Contact</string>
+    <string name="action_update_profile">Update Profile</string>
+    <string name="notified">Notified</string>
+    <string name="action_notify_again">Notify Again</string>
+    <string name="action_done">Done</string>
+    <string name="notification_received">Received Notification</string>
+    <string name="close">Close</string>
+    <string name="action_logout">Log out</string>
+    <string name="action_send">Send</string>
+    <string name="notification_send">Notification sent</string>
+    <string name="report">Send us some feedback or suggestions!</string>
+    <string name="title_activity_maps">Map</string>
+</resources>

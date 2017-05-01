@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+
+
+    <TextView
+        android:id="@+id/textView_notified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textSize="30sp"
+        android:text="@string/notified"
+
+        android:layout_marginLeft="50dp"
+    />
+    <cn.iwgang.countdownview.CountdownView
+        android:id="@+id/countdownView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:isHideTimeBackground="true"
+        app:isShowMinute="true"
+        app:isShowSecond="true"
+        app:timeTextColor="#000000"
+        app:timeTextSize="100sp"
+        app:isTimeTextBold="true"
+        app:suffixGravity="bottom"
+
+        app:suffixTextColor="#000000"
+        app:suffixTextSize="75sp"
+        android:layout_marginBottom="30dp"
+        />
+
+    <TextView
+        android:id="@+id/textView_Notify_CarOwnerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="test"
+        android:layout_below="@+id/countdownView"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/textView_Notify_CarPlateNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="WA8888"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/textView_Notify_ContactNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="WA8888"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        >
+
+        <Button
+            android:id="@+id/button_notify_again"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:text="@string/action_notify_again"
+            />
+
+        <Button
+            android:id="@+id/button_done"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/action_done"/>
+    </LinearLayout>
+</LinearLayout>
