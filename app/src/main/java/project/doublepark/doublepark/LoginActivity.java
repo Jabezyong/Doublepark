@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     //progress dialog
     private ProgressDialog progressDialog;
-
+    TextView mSignupLink;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,7 +139,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
+        mSignupLink = (TextView) findViewById(R.id.link_signup);
+        mSignupLink.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
         //getting firebase auth object
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -459,7 +466,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     manager.saveContactList(contactList);
                     manager.saveEmail(user.email);
                     manager.saveName(user.name);
-                    manager.saveProfileUrl(user.photo);
+                    manager.saveProfilePicUrl(user.photo);
 //                                Toast.makeText(LoginActivity.this, userInformation.email, Toast.LENGTH_SHORT).show();
                     firebaseAuth.signInWithEmailAndPassword(user.email, password)
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {

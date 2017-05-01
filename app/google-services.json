@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "1068082598510",
-    "firebase_url": "https://doubleparking-f4719.firebaseio.com",
-    "project_id": "doubleparking-f4719",
-    "storage_bucket": "doubleparking-f4719.appspot.com"
+    "project_number": "549037831761",
+    "firebase_url": "https://doublepark-24bc8.firebaseio.com",
+    "project_id": "doublepark-24bc8",
+    "storage_bucket": "doublepark-24bc8.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1068082598510:android:3761b85a8cc72e64",
+        "mobilesdk_app_id": "1:549037831761:android:3761b85a8cc72e64",
         "android_client_info": {
           "package_name": "project.doublepark.doublepark"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1068082598510-e7bgvod622ge4hbtq2s8mib6aeqrkbln.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "project.doublepark.doublepark",
-            "certificate_hash": "ed9034631fa12f2689e3b058e3459943bec1b1df"
-          }
-        },
-        {
-          "client_id": "1068082598510-j5mtbquj41nfnuo7r36l26voks0j2ccf.apps.googleusercontent.com",
+          "client_id": "549037831761-ggmse1q31p9d0ias9409jcie0lourkoj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCkWqcFoZI62HmTRTYRKeI2QZy9xiKqXUU"
+          "current_key": "AIzaSyAAVpzIer-STPzOTjbEPzY7A2u30m5iPJ8"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1068082598510-j5mtbquj41nfnuo7r36l26voks0j2ccf.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

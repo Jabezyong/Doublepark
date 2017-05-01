@@ -1,8 +1,14 @@
 package project.doublepark.doublepark;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -18,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,14 +33,25 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -44,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText editTextContactNo;
     private EditText editTextPassword;
     private EditText editTextConPassword;
-
+    private CircleImageView profilePicture;
     //Firebase declareation
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -52,7 +70,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     //Declare UI
     ProgressDialog progressDialog;
-
+    boolean flag; // used when user updated his profile photo then upload to firebase too;
+    private final static int RESULT_SELECT_IMAGE = 100;
+    String carPlate ="";
+    UpdateProfilePicTask mAsynTask;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +86,19 @@ public class RegisterActivity extends AppCompatActivity {
         editTextContactNo = (EditText)findViewById(R.id.editTextContactNo);
         editTextPassword = (EditText)findViewById(R.id.editTextPassword);
         editTextConPassword = (EditText)findViewById(R.id.editTextReenterPassword);
-
+        profilePicture = (CircleImageView) findViewById(R.id.imageViewProfile);
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    //Pick Image From Gallery
+                    Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, RESULT_SELECT_IMAGE);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
         progressDialog = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -75,9 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public boolean checkCarPlateTaken(final String c,final String email, final String password){
         boolean isTaken;
-        //Remove the space between character in carplate
-        String carPlateNoSpace = c.replaceAll("\\s+","");
-        final String carPlate = carPlateNoSpace.toUpperCase();
+
         FirebaseDatabase.getInstance().getReference().child("User")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -91,32 +122,33 @@ public class RegisterActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
                                 return;
                             }
-                            else{
-                                mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if(task.isSuccessful()){
-                                            saveUserInformation();
-                                            progressDialog.dismiss();
-                                            Toast.makeText(RegisterActivity.this,"Registered Successful",Toast.LENGTH_SHORT).show();
-
-
-
-                                            //go to another activity
-                                            finish();
-                                            Intent intent = new Intent(RegisterActivity.this,HomepageActivity.class);
-                                            startActivity(intent);
-                                        }
-                                        else{
-                                            progressDialog.dismiss();
-                                            Toast.makeText(RegisterActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            }
-
                         }
+                        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    saveUserInformation();
+                                    progressDialog.dismiss();
+
+
+
+                                    if(flag){
+                                        profilePicture.buildDrawingCache();
+                                        mAsynTask = new UpdateProfilePicTask(profilePicture.getDrawingCache(),RegisterActivity.this);
+                                        mAsynTask.execute();
+                                    }else {
+                                        //go to another activity
+                                        newActivity();
+
+                                    }
+                                }
+                                else{
+                                    progressDialog.dismiss();
+                                    Toast.makeText(RegisterActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
 
                     @Override
@@ -128,11 +160,18 @@ public class RegisterActivity extends AppCompatActivity {
         return false;
     }
 
+    private void newActivity() {
+        Toast.makeText(RegisterActivity.this,"Registered Successful",Toast.LENGTH_SHORT).show();
+        finish();
+        Intent intent = new Intent(RegisterActivity.this, HomepageActivity.class);
+        startActivity(intent);
+    }
+
     public void registerUser(View view){
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String conPassword = editTextConPassword.getText().toString().trim();
-        String carPlate = editTextCarPlate.getText().toString().trim();
+        carPlate = editTextCarPlate.getText().toString().trim();
 
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Please enter email",Toast.LENGTH_SHORT).show();
@@ -151,7 +190,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressDialog.setMessage("Registering User...");
         progressDialog.show();
+        // Make no space between and upper every character.
 
+        String carPlateNoSpace = carPlate.replaceAll("\\s+","");
+        carPlate = carPlateNoSpace.toUpperCase();
         checkCarPlateTaken(carPlate,email,password);
     }
 
@@ -162,7 +204,7 @@ public class RegisterActivity extends AppCompatActivity {
         ArrayList<String> contactList = new ArrayList<String>();
         contactList.add(contactNo);
 
-        String carPlate = editTextCarPlate.getText().toString().trim();
+
         String email = editTextEmail.getText().toString().trim();
         //token is used to notify user via server
         final String token = SharePrefManager.getInstance(this).getDeviceToken();
@@ -214,5 +256,137 @@ public class RegisterActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /*if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                // Log.d(TAG, String.valueOf(bitmap));
+                ImageView imageView = (ImageView) findViewById(R.id.createEventImageFile);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }*/
 
+        if (requestCode == RESULT_SELECT_IMAGE && resultCode == RESULT_OK && data != null) {
+            // Let's read picked image data - its URI
+            Uri uri = data.getData();
+
+            doCrop(uri);
+
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            //Bitmap bitmap = CropImageView
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
+                    bitmap = scale(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // Log.d(TAG, String.valueOf(bitmap));
+
+
+                profilePicture.setImageBitmap(bitmap);
+                flag = true;
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+
+    }
+    public void doCrop(Uri imageUri){
+        CropImage.activity(imageUri)
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .setMinCropResultSize(136,136)
+                .setCropShape(CropImageView.CropShape.OVAL)
+                //.setMaxCropResultSize(1000,480)
+                .setAspectRatio(1,1)
+                .start(this);
+    }
+
+    private Bitmap scale(Bitmap b) {
+        return Bitmap.createScaledBitmap(b,profilePicture.getWidth(),profilePicture.getHeight(),  false);
+    }
+
+    public class UpdateProfilePicTask extends AsyncTask<Void,Void,Void> {
+        Bitmap drawingCache;
+        Context context;
+        public UpdateProfilePicTask(Bitmap bitmap,Context context){
+            this.drawingCache = bitmap;
+            this.context = context;
+        }
+
+        private void updateProfileUrl(final String url, final Context context) {
+            FirebaseDatabase firebase = FirebaseDatabase.getInstance();
+            final DatabaseReference reference = firebase.getReference();
+            SharePrefManager manager = SharePrefManager.getInstance(getApplicationContext());
+            manager.saveProfilePicUrl(url);
+            final String carPlate = manager.getCarPlate();
+            if(carPlate == null){
+                FirebaseAuth.getInstance().signOut();
+                return;
+            }
+            //TO UPDATE THE photo url on fireabase
+            Query query = reference.child("User").orderByChild("carPlate").equalTo(carPlate);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+//                if(iterator.hasNext()) {
+                    DataSnapshot nodeDataSnapshot = iterator.next();
+                    String key = nodeDataSnapshot.getKey();
+                    String path = "/" + dataSnapshot.getKey() + "/" + key;
+                    HashMap<String, Object> result = new HashMap<>();
+                    result.put("photo", url);
+                    reference.child(path).updateChildren(result);
+                    if(progressDialog!=null)
+                    progressDialog.dismiss();
+                    newActivity();
+//                    Toast.makeText(context, "Successfully updated profile!", Toast.LENGTH_SHORT).show();
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if(profilePicture != null){
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                drawingCache.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] data = baos.toByteArray();
+
+                StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+                SharePrefManager manager = SharePrefManager.getInstance(getApplicationContext());
+                StorageReference filepath =
+                        mStorage.child("UserPhotos").child( manager.getEmail()+ ".png");;
+                UploadTask uploadTask = filepath.putBytes(data);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        @SuppressWarnings("VisibleForTests")  String photo
+                                = taskSnapshot.getDownloadUrl().toString();
+                        //Save image into cache
+                        Cache.getInstance().saveProfileImage(drawingCache);
+                        updateProfileUrl(photo,context);
+                    }
+                });
+            }
+            return null;
+        }
+
+
+
+    }
 }

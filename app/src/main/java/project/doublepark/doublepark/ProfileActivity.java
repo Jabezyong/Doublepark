@@ -72,6 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     //Sharepreferencemanager
     SharePrefManager manager;
+    Cache cache ;
     ProgressDialog progressDialog;
     private final static int RESULT_SELECT_IMAGE = 100;
 
@@ -84,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
         setupFloatingButton();
         progressDialog = new ProgressDialog(ProfileActivity.this);
         manager = SharePrefManager.getInstance(getApplicationContext());
-
+        cache = Cache.getInstance();
         textViewCarPlate = (TextView) findViewById(R.id.profile_car_number);
         editTextName = (EditText) findViewById(R.id.profile_name);
         textViewEmail = (TextView) findViewById(R.id.profile_email);
@@ -261,8 +262,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
+                manager.clearAll();
                 finish();
-                startActivity(new Intent(getApplicationContext(),FirstScreenActivity.class));
+                startActivity(new Intent(getApplicationContext(),LoginActivity.class));
             }
         });
         setupAds();
@@ -276,8 +278,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadProfilePicture() {
-        Cache instance = Cache.getInstance();
-        Bitmap bitmap = (Bitmap) instance.getLru().get(Tags.PERSONAL_PROFILE);
+
+        Bitmap bitmap = (Bitmap) cache.getLru().get(Tags.PERSONAL_PROFILE);
         if(bitmap == null){
             String url = SharePrefManager.getInstance(getApplicationContext()).getProfilePicture();
             if(url != null) {
@@ -289,11 +291,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
     private void loadImageToCache(String url) {
-        final Cache instance = Cache.getInstance();
         ImageRequest request = new ImageRequest(url, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
-                instance.getLru().put(Tags.PERSONAL_PROFILE,response);
+                cache.getLru().put(Tags.PERSONAL_PROFILE,response);
                 profilePicture.setImageBitmap(response);
 //                dismissDialogAndNewActivity();
             }
@@ -456,6 +457,7 @@ public class ProfileActivity extends AppCompatActivity {
             FirebaseDatabase firebase = FirebaseDatabase.getInstance();
             final DatabaseReference reference = firebase.getReference();
             final String carPlate = manager.getCarPlate();
+            manager.saveProfilePicUrl(url);
             if(carPlate == null){
                 FirebaseAuth.getInstance().signOut();
                 return;
@@ -501,6 +503,7 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         @SuppressWarnings("VisibleForTests")  String photo
                                 = taskSnapshot.getDownloadUrl().toString();
+                        Cache.getInstance().saveProfileImage(drawingCache);
                         updateProfileUrl(photo,context);
                     }
                 });

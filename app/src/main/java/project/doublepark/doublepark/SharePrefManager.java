@@ -65,10 +65,10 @@ public class SharePrefManager {
         editor.apply();
         return true;
     }
-    public boolean saveProfileUrl(String email) {
+    public boolean saveProfilePicUrl(String url) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(PROFILE_PICTURE, email);
+        editor.putString(PROFILE_PICTURE, url);
         editor.apply();
         return true;
     }
@@ -120,6 +120,10 @@ public class SharePrefManager {
         return contactList;
 
 
+    }
+
+    public void clearAll(){
+        mInstance.clearAll();
     }
 
 
