@@ -134,7 +134,7 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     public void sendEmail() {
-        String content = etContent.toString().trim();
+        String content = etContent.getText().toString().trim();
 //        SharePrefManager manager = SharePrefManager.getInstance(getApplicationContext());
 //        String emailFromSender = manager.getEmail();
 //        String carplate = manager.getCarPlate();
@@ -149,9 +149,24 @@ public class ReportActivity extends AppCompatActivity {
 //        } catch (Exception e) {
 //            Log.e("SendMail", e.getMessage(), e);
 //        }
-        SendEmail email = new SendEmail(ReportActivity.this,content);
-        email.execute();
+//        SendEmail email = new SendEmail(ReportActivity.this,content);
+//        email.execute();
+
+        //Using intent first
+
+        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("plain/text");
+        String emailList[] = {"doubleparkingapp@gmail.com"};
+
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, emailList);
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Double Park App Feedback");
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, content);
+
+        startActivity(emailIntent);
+
+
     }
+
 
 
 }

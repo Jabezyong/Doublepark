@@ -37,4 +37,5 @@
     <string name="report">Send us some feedback or suggestions!</string>
     <string name="title_activity_maps">Map</string>
     <string name="aboutus">DoublePark App is here to help the community!</string>
+    <string name="email_subject">DoublePark App Feedback</string>
 </resources>
