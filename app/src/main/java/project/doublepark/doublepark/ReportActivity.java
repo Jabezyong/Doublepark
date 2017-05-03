@@ -1,9 +1,15 @@
 package project.doublepark.doublepark;
 
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -11,13 +17,27 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
-public class ReportActivity extends AppCompatActivity {
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.*;
+import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
+public class ReportActivity extends AppCompatActivity {
+    EditText etContent;
+    Button btnSend;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-
+        etContent = (EditText) findViewById(R.id.editTextReport);
+        btnSend = (Button) findViewById(R.id.button_send_report);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail();
+            }
+        });
         setupFloatingButton();
     }
 
@@ -112,4 +132,26 @@ public class ReportActivity extends AppCompatActivity {
                 .attachTo(actionButton)
                 .build();
     }
+
+    public void sendEmail() {
+        String content = etContent.toString().trim();
+//        SharePrefManager manager = SharePrefManager.getInstance(getApplicationContext());
+//        String emailFromSender = manager.getEmail();
+//        String carplate = manager.getCarPlate();
+//        //Adding message
+//        Spanned spanned = Html.fromHtml("Carplate : " + carplate + "<br/>" + "Email : " + emailFromSender + "<br/>" + "Content : " + content);
+//        GMailSender sender = new GMailSender(EndPoints.USER_EMAIL, EndPoints.PASSWORD_EMAIL);
+//        try {
+//            sender.sendMail("Report From "+emailFromSender,
+//                    spanned.toString(),
+//                    EndPoints.USER_EMAIL,
+//                    "doublepark1018@gmail.com");
+//        } catch (Exception e) {
+//            Log.e("SendMail", e.getMessage(), e);
+//        }
+        SendEmail email = new SendEmail(ReportActivity.this,content);
+        email.execute();
+    }
+
+
 }

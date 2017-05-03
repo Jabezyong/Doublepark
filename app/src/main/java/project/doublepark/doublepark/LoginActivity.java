@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             //close this activity
             finish();
             //opening profile activity
-            startActivity(new Intent(getApplicationContext(), FloatingButtonActivity.class));
+            startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
         }
 
         // Set up the login form.
@@ -399,7 +399,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(LoginActivity.this, FloatingButtonActivity.class);
+                Intent intent = new Intent(LoginActivity.this, HomepageActivity.class);
                 startActivity(intent);
             } else {
                 mEmailView.setError(getString(R.string.error_invalid_car_plate));

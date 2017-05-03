@@ -350,7 +350,7 @@ public class ProfileActivity extends AppCompatActivity {
         itemIconSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ProfileActivity.this,FloatingButtonActivity.class));
+                startActivity(new Intent(getApplicationContext(),HistoryActivity.class));
             }
         });
 
@@ -372,7 +372,13 @@ public class ProfileActivity extends AppCompatActivity {
         ImageView itemIconForth = new ImageView(this);
         itemIconForth.setImageResource(R.drawable.ic_aboutus_button);
         SubActionButton button4 = itemBuilderForth.setContentView(itemIconForth).build();
-
+        itemIconForth.setClickable(true);
+        itemIconForth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),AboutUsActivity.class));
+            }
+        });
         FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
                 .addSubActionView(button1)
                 .addSubActionView(button2)

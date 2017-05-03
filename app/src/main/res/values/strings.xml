@@ -14,7 +14,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-
     <string name="title_activity_first_screen">DoublePark</string>
     <string name="action_register">Register</string>
     <string name="prompt_name">Name</string>
@@ -37,4 +36,5 @@
     <string name="notification_send">Notification sent</string>
     <string name="report">Send us some feedback or suggestions!</string>
     <string name="title_activity_maps">Map</string>
+    <string name="aboutus">DoublePark App is here to help the community!</string>
 </resources>

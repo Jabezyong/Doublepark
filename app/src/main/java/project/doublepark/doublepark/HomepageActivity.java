@@ -213,7 +213,7 @@ public class HomepageActivity extends AppCompatActivity {
         itemIconSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(getApplicationContext(),HistoryActivity.class));
             }
         });
 
@@ -246,7 +246,7 @@ public class HomepageActivity extends AppCompatActivity {
         itemIconForth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),HistoryActivity.class));
+                startActivity(new Intent(getApplicationContext(),AboutUsActivity.class));
             }
         });
 
