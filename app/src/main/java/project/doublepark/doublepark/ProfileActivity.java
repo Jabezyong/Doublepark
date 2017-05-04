@@ -262,6 +262,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
+                if(manager == null){
+                    manager = SharePrefManager.getInstance(getApplicationContext());
+                }
                 manager.clearAll();
                 finish();
                 startActivity(new Intent(getApplicationContext(),LoginActivity.class));
