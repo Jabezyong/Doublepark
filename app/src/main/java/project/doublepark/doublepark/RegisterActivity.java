@@ -74,6 +74,8 @@ public class RegisterActivity extends AppCompatActivity {
     private final static int RESULT_SELECT_IMAGE = 100;
     String carPlate ="";
     UpdateProfilePicTask mAsynTask;
+    DatabaseReference userReference;
+    ValueEventListener checkUserExistenceListence;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,54 +110,48 @@ public class RegisterActivity extends AppCompatActivity {
 
     public boolean checkCarPlateTaken(final String c,final String email, final String password){
         boolean isTaken;
-
-        FirebaseDatabase.getInstance().getReference().child("User")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        //It is asynchronous, so need to insert inside
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            UserInformation user = snapshot.getValue(UserInformation.class);
-                            if(user.carPlate.equals(carPlate)){
-                                Toast.makeText(RegisterActivity.this,"The car plate has been taken",Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                                return;
-                            }
-                        }
-                        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    saveUserInformation();
-                                    progressDialog.dismiss();
-
-
-
-                                    if(flag){
-                                        profilePicture.buildDrawingCache();
-                                        mAsynTask = new UpdateProfilePicTask(profilePicture.getDrawingCache(),RegisterActivity.this);
-                                        mAsynTask.execute();
-                                    }else {
-                                        //go to another activity
-                                        newActivity();
-
-                                    }
-                                }
-                                else{
-                                    progressDialog.dismiss();
-                                    Toast.makeText(RegisterActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+        userReference = FirebaseDatabase.getInstance().getReference().child("User");
+        checkUserExistenceListence = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserInformation user = snapshot.getValue(UserInformation.class);
+                    if(user.carPlate.equals(carPlate)){
+                        Toast.makeText(RegisterActivity.this,"The car plate has been taken",Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        return;
                     }
+                }
+                createUser(email,password);
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+            }
+        };
+        userReference.addValueEventListener(checkUserExistenceListence);
+//        FirebaseDatabase.getInstance().getReference().child("User")
+//                .addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                        //It is asynchronous, so need to insert inside
+//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                            UserInformation user = snapshot.getValue(UserInformation.class);
+//                            if(user.carPlate.equals(carPlate)){
+//                                Toast.makeText(RegisterActivity.this,"The car plate has been taken",Toast.LENGTH_SHORT).show();
+//                                progressDialog.dismiss();
+//                                return;
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
 
         return false;
     }
@@ -385,8 +381,33 @@ public class RegisterActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
 
+    private void createUser(String email,String password){
+        userReference.removeEventListener(checkUserExistenceListence);
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
 
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    saveUserInformation();
+                    progressDialog.dismiss();
 
+                    if(flag){
+                        profilePicture.buildDrawingCache();
+                        mAsynTask = new UpdateProfilePicTask(profilePicture.getDrawingCache(),RegisterActivity.this);
+                        mAsynTask.execute();
+                    }else {
+                        //go to another activity
+                        newActivity();
+
+                    }
+                }
+                else{
+                    progressDialog.dismiss();
+                    Toast.makeText(RegisterActivity.this,task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
