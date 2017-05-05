@@ -65,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
     Spinner contactList;
     UpdateProfilePicTask mAsynTask;
     AdView adView;
+    AlertDialog alertLogout;
     boolean flag; // used when user updated his profile photo then upload to firebase too;
     //Array list of contact number
     //Need to retrieve from Firebase
@@ -258,9 +259,28 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        btnLogout.setOnClickListener(new View.OnClickListener() {
+        AlertDialog.Builder builderLogout = new AlertDialog.Builder(this);
+        final AlertDialog alertLogout = builderLogout.create();
+        alertLogout.setTitle(R.string.logout_confirmation);
+        alertLogout.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+                dialogInterface.dismiss();
+            }
+        });
+
+        alertLogout.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                dialogInterface.cancel();
+                dialogInterface.dismiss();
+            }
+        });
+
+        alertLogout.setButton(DialogInterface.BUTTON_POSITIVE, "Log out", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
                 FirebaseAuth.getInstance().signOut();
                 if(manager == null){
                     manager = SharePrefManager.getInstance(getApplicationContext());
@@ -268,6 +288,15 @@ public class ProfileActivity extends AppCompatActivity {
                 manager.clearAll();
                 finish();
                 startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+            }
+        });
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertLogout.cancel();
+                alertLogout.dismiss();
+                alertLogout.show();
             }
         });
         setupAds();
@@ -520,4 +549,6 @@ public class ProfileActivity extends AppCompatActivity {
             return true;
         }
     }
+
+
 }

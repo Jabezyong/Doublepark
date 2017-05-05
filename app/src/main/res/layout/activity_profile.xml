@@ -25,16 +25,16 @@
         android:layout_gravity="center"
         android:adjustViewBounds="false"
         android:src="@drawable/ic_profile_gray"/>
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
+        android:textSize="18sp"
         android:id="@+id/profile_car_number"
         android:drawableLeft="@drawable/ic_car_gray"
         android:drawableStart="@drawable/ic_car_gray"
         android:drawablePadding="13dp"
-        android:hint="@string/prompt_car_plate"/>
+        android:hint="@string/prompt_car_plate"
+        android:paddingLeft="6dp"/>
     <!--<TextView-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
@@ -48,13 +48,13 @@
         android:paddingTop="5dp"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:ems="10"
+        android:ems="16"
         android:id="@+id/profile_name"
         android:drawableLeft="@drawable/ic_profile_gray"
         android:drawableStart="@drawable/ic_profile_gray"
         android:drawablePadding="18dp"
         android:paddingLeft="6dp"
-        android:hint="@string/prompt_car_plate"/>
+        />
     <!--<EditText-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
@@ -63,11 +63,10 @@
         <!--android:id="@+id/profile_name"-->
         <!--android:layout_marginLeft="15dp"-->
         <!--android:layout_marginRight="15dp"/>-->
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
+        android:textSize="18sp"
         android:id="@+id/profile_email"
         android:drawableLeft="@drawable/ic_email_gray"
         android:drawableStart="@drawable/ic_email_gray"
@@ -100,30 +99,37 @@
             />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+        <Button
+            android:id="@+id/button_add_contact"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
+            android:background="@drawable/rounded_button"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/action_add_contact"/>
 
-    <Button
-        android:id="@+id/button_add_contact"
-        android:layout_width="150dp"
-        android:layout_height="35dp"
-        android:background="@drawable/rounded_button"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:text="@string/action_add_contact"/>
-
-    <Button
-        android:id="@+id/button_update_profile"
-        android:layout_width="150dp"
-        android:layout_height="35dp"
-        android:background="@drawable/rounded_button"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:text="@string/action_update_profile"/>
-
+        <Button
+            android:id="@+id/button_update_profile"
+            android:layout_width="150dp"
+            android:layout_height="35dp"
+            android:background="@drawable/rounded_button"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/action_update_profile"/>
+    </LinearLayout>
     <Button
         android:id="@+id/button_logout"
         android:layout_width="150dp"
         android:layout_height="35dp"
-        android:background="@drawable/rounded_button"
+        android:background="@drawable/rounded_button_grey"
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:text="@string/action_logout"/>

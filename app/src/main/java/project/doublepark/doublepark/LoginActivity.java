@@ -131,6 +131,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(View view) {
 
                 String carPlate = mEmailView.getText().toString();
+                carPlate = carPlate.toUpperCase();
                 String password = mPasswordView.getText().toString();
 
                 signIn(carPlate,password);

@@ -102,6 +102,7 @@ public class HomepageActivity extends AppCompatActivity {
                             UserInformation user = snapshot.getValue(UserInformation.class);
                             //Check if the user's car plate number matches the input car plate number
                             String carPlateNumber = editTextCarPlate.getText().toString();
+                            carPlateNumber = carPlateNumber.toUpperCase();
 
                             if(user.carPlate.equals(carPlateNumber)) {
                                 intent = new Intent(HomepageActivity.this,NotifyOwnerActivity.class);
