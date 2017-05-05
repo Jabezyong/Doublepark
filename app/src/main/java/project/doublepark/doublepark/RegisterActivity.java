@@ -5,15 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -106,6 +112,8 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+
+        setupFontForTitle();
     }
 
     public boolean checkCarPlateTaken(final String c,final String email, final String password){
@@ -409,5 +417,23 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setupFontForTitle() {
+        TextView tv = new TextView(getApplicationContext());
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(android.app.ActionBar.LayoutParams.WRAP_CONTENT, android.app.ActionBar.LayoutParams.WRAP_CONTENT);
+        tv.setLayoutParams(lp);
+        tv.setText(R.string.action_register);
+        tv.setTextSize(28);
+        tv.setTextColor(Color.parseColor("#FFFFFF"));
+
+        Typeface typeFace=Typeface.createFromAsset(getApplicationContext().getResources().getAssets(),"Spork.ttf");
+        tv.setTypeface(typeFace);
+        SpannableString s = new SpannableString("Double Park");
+        s.setSpan(typeFace, 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getSupportActionBar().setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(tv);
     }
 }

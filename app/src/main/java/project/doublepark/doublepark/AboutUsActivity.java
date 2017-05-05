@@ -1,11 +1,17 @@
 package project.doublepark.doublepark;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
@@ -19,6 +25,7 @@ public class AboutUsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about_us);
 
         setupFloatingButton();
+        setupFontForTitle();
     }
 
     public void setupFloatingButton() {
@@ -110,5 +117,23 @@ public class AboutUsActivity extends AppCompatActivity {
                 .setEndAngle(360)
                 .attachTo(actionButton)
                 .build();
+    }
+
+    private void setupFontForTitle() {
+        TextView tv = new TextView(getApplicationContext());
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(android.app.ActionBar.LayoutParams.WRAP_CONTENT, android.app.ActionBar.LayoutParams.WRAP_CONTENT);
+        tv.setLayoutParams(lp);
+        tv.setText(R.string.aboutus_title);
+        tv.setTextSize(28);
+        tv.setTextColor(Color.parseColor("#FFFFFF"));
+
+        Typeface typeFace=Typeface.createFromAsset(getApplicationContext().getResources().getAssets(),"Spork.ttf");
+        tv.setTypeface(typeFace);
+        SpannableString s = new SpannableString("Double Park");
+        s.setSpan(typeFace, 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getSupportActionBar().setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(tv);
     }
 }

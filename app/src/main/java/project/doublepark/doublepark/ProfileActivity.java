@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +14,8 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,6 +104,8 @@ public class ProfileActivity extends AppCompatActivity {
         contactList = (Spinner) findViewById(R.id.spinner_contact_no);
         //Get the contact number from shared preferences
         contactNum = manager.getContactList();
+
+        setupFontForTitle();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,contactNum);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -549,6 +556,25 @@ public class ProfileActivity extends AppCompatActivity {
             return true;
         }
     }
+
+    private void setupFontForTitle() {
+        TextView tv = new TextView(getApplicationContext());
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(android.app.ActionBar.LayoutParams.WRAP_CONTENT, android.app.ActionBar.LayoutParams.WRAP_CONTENT);
+        tv.setLayoutParams(lp);
+        tv.setText(R.string.profile);
+        tv.setTextSize(28);
+        tv.setTextColor(Color.parseColor("#FFFFFF"));
+
+        Typeface typeFace=Typeface.createFromAsset(getApplicationContext().getResources().getAssets(),"Spork.ttf");
+        tv.setTypeface(typeFace);
+        SpannableString s = new SpannableString("Double Park");
+        s.setSpan(typeFace, 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getSupportActionBar().setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(tv);
+    }
+
 
 
 }

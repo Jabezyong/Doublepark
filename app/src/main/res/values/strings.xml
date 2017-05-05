@@ -38,7 +38,10 @@
     <string name="title_activity_maps">Map</string>
     <string name="aboutus">DoublePark App is here to help the community!</string>
     <string name="email_subject">DoublePark App Feedback</string>
-
+    <string name="profile">Profile</string>
+    <string name="report_title">Report</string>
     <string name="logout_confirmation">Are you sure?</string>
     <string name="logout_cancel">Cancel</string>
+    <string name="history">History</string>
+    <string name="aboutus_title">About Us</string>
 </resources>

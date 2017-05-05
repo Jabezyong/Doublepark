@@ -2,9 +2,13 @@ package project.doublepark.doublepark;
 
 import android.app.ProgressDialog;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -63,6 +67,9 @@ public class HistoryActivity extends AppCompatActivity {
         /**************** Create Custom Adapter *********/
         adapter=new HistoryAdapter( CustomListView, valuesArr,res );
         list.setAdapter( adapter );
+
+        setupFontForTitle();
+
     }
     /****** Function to set data in ArrayList *************/
     public void setListData() {
@@ -246,4 +253,23 @@ public class HistoryActivity extends AppCompatActivity {
             return o2.getDate().compareTo(o1.getDate());
         }
     }
+
+    private void setupFontForTitle() {
+        TextView tv = new TextView(getApplicationContext());
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(android.app.ActionBar.LayoutParams.WRAP_CONTENT, android.app.ActionBar.LayoutParams.WRAP_CONTENT);
+        tv.setLayoutParams(lp);
+        tv.setText(R.string.history);
+        tv.setTextSize(28);
+        tv.setTextColor(Color.parseColor("#FFFFFF"));
+
+        Typeface typeFace=Typeface.createFromAsset(getApplicationContext().getResources().getAssets(),"Spork.ttf");
+        tv.setTypeface(typeFace);
+        SpannableString s = new SpannableString("Double Park");
+        s.setSpan(typeFace, 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getSupportActionBar().setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(tv);
+    }
+
 }

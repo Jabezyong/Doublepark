@@ -73,7 +73,7 @@ public class HomepageActivity extends AppCompatActivity {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
         tv.setLayoutParams(lp);
         tv.setText("Double Park");
-                tv.setTextSize(28);
+        tv.setTextSize(28);
         tv.setTextColor(Color.parseColor("#FFFFFF"));
 
         Typeface typeFace=Typeface.createFromAsset(getApplicationContext().getResources().getAssets(),"Spork.ttf");
