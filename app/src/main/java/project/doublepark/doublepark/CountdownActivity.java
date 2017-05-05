@@ -34,6 +34,7 @@ public class CountdownActivity extends AppCompatActivity {
     String key;
     String phone;
     boolean firstTime = true;
+    boolean firstNotification = true;
     String carPlateNum;
     Context mCtx;
     boolean isFirstTime = true;
@@ -45,9 +46,9 @@ public class CountdownActivity extends AppCompatActivity {
         setContentView(R.layout.activity_countdown);
 
         final CountdownView countdownView = (CountdownView) findViewById(R.id.countdownView);
-        countdownView.start(30000); //5 minutes in millisecond
+        countdownView.start(300000); //5 minutes in millisecond
         firstTime = true;
-
+        firstNotification = true;
         //Get the car plate number and owner name from previous activity
 //        carPlateNum = getIntent().getStringExtra("CAR_PLATE_NUMBER");
         String name = getIntent().getBundleExtra("BUNDLE").getString("CAR_OWNER_NAME");
@@ -83,10 +84,10 @@ public class CountdownActivity extends AppCompatActivity {
                 //Need to display the contact number after 5 minutes
 
 
-                if(firstTime) {
+                if(firstNotification) {
                     countdownView.start(60000);
                     btnNotifyAgain.setEnabled(false);
-                    firstTime = false;
+                    firstNotification = false;
                 }else {
                     countdownView.start(0);
                     txtViewContactNumber.setVisibility(View.VISIBLE);

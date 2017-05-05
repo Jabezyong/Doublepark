@@ -1,6 +1,7 @@
 package project.doublepark.doublepark;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -11,6 +12,8 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -23,6 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,7 +75,7 @@ public class HistoryActivity extends AppCompatActivity {
         list.setAdapter( adapter );
 
         setupFontForTitle();
-
+        setupFloatingButton();
     }
     /****** Function to set data in ArrayList *************/
     public void setListData() {
@@ -270,6 +276,100 @@ public class HistoryActivity extends AppCompatActivity {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(tv);
+    }
+
+
+
+
+    public void setupFloatingButton() {
+        ImageView icon = new ImageView(this); // Create an icon
+        icon.setImageResource(R.drawable.ic_car);
+
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setPosition(6)
+                .setContentView(icon)
+                .build();
+
+        //Set the size of the icon
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(120,120);
+
+        // First SubActionButton (Profile)
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+        //set te size of first icon
+        itemBuilder.setLayoutParams(params);
+        // repeat many times:
+        ImageView itemIcon = new ImageView(this);
+        itemIcon.setImageResource(R.drawable.ic_profile);
+        SubActionButton button1 = itemBuilder.setContentView(itemIcon).build();
+
+        // Start the activity after the first icon is being tap
+        itemIcon.setClickable(true);
+        itemIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+            }
+        });
+
+        // Second SubActionButton (Notification)
+        SubActionButton.Builder itemBuilderSecond = new SubActionButton.Builder(this);
+        //set te size of second icon
+        itemBuilderSecond.setLayoutParams(params);
+        // repeat many times:
+        ImageView itemIconSecond = new ImageView(this);
+        itemIconSecond.setImageResource(R.drawable.ic_notifications_button);
+        SubActionButton button2 = itemBuilderSecond.setContentView(itemIconSecond).build();
+        itemIconSecond.setClickable(true);
+        itemIconSecond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+
+
+        // Third SubActionButton (Report/Suggestion)
+        SubActionButton.Builder itemBuilderThird = new SubActionButton.Builder(this);
+        //set te size of third icon
+        itemBuilderThird.setLayoutParams(params);
+        // repeat many times:
+        ImageView itemIconThird = new ImageView(this);
+        itemIconThird.setImageResource(R.drawable.ic_report);
+        SubActionButton button3 = itemBuilderThird.setContentView(itemIconThird).build();
+        itemIconThird.setClickable(true);
+        itemIconThird.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),ReportActivity.class));
+            }
+        });
+
+        // Fourth SubActionButton (About Us)
+        SubActionButton.Builder itemBuilderForth = new SubActionButton.Builder(this);
+        //set te size of fourth icon
+        itemBuilderForth.setLayoutParams(params);
+        // repeat many times:
+        ImageView itemIconForth = new ImageView(this);
+        itemIconForth.setImageResource(R.drawable.ic_aboutus_button);
+        SubActionButton button4 = itemBuilderForth.setContentView(itemIconForth).build();
+        itemIconForth.setClickable(true);
+        itemIconForth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),AboutUsActivity.class));
+            }
+        });
+
+
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(button1)
+                .addSubActionView(button2)
+                .addSubActionView(button3)
+                .addSubActionView(button4)
+                .setStartAngle(270)
+                .setEndAngle(360)
+                .attachTo(actionButton)
+                .build();
     }
 
 }
