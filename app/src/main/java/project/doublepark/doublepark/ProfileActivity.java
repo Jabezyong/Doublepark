@@ -81,6 +81,8 @@ public class ProfileActivity extends AppCompatActivity {
     Cache cache ;
     ProgressDialog progressDialog;
     private final static int RESULT_SELECT_IMAGE = 100;
+    ValueEventListener updateContactListener;
+    DatabaseReference userReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,27 +112,28 @@ public class ProfileActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item,contactNum);
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         contactList.setAdapter(adapter);
+        updateContactListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("User");
+
+                firebaseDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("contactNo").setValue(contactNum);
+                manager.saveContactList(contactNum);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
         contactList.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Collections.swap(contactNum,0,i);
 
                 //Update the contact list on Firebase
-                FirebaseDatabase.getInstance().getReference().child("User")
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                DatabaseReference firebaseDatabase = FirebaseDatabase.getInstance().getReference().child("User");
-
-                                firebaseDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("contactNo").setValue(contactNum);
-                                manager.saveContactList(contactNum);
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
+                userReference = FirebaseDatabase.getInstance().getReference().child("User");
+                userReference.addValueEventListener(updateContactListener);
 
             }
 
@@ -404,7 +407,13 @@ public class ProfileActivity extends AppCompatActivity {
         ImageView itemIconThird = new ImageView(this);
         itemIconThird.setImageResource(R.drawable.ic_report);
         SubActionButton button3 = itemBuilderThird.setContentView(itemIconThird).build();
-
+        itemIconThird.setClickable(true);
+        itemIconThird.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),ReportActivity.class));
+            }
+        });
         // Fourth SubActionButton (About Us)
         SubActionButton.Builder itemBuilderForth = new SubActionButton.Builder(this);
         //set te size of fourth icon
@@ -578,5 +587,19 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(userReference!=null && updateContactListener!=null){
+            userReference.removeEventListener(updateContactListener);
+        }
+    }
 
+    @Override
+    public void onBackPressed() {
+        //Override to re-direct them back to the homepage activity
+        Intent intent = new Intent(ProfileActivity.this, HomepageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 }

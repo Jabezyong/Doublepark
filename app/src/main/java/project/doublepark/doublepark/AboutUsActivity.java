@@ -70,7 +70,7 @@ public class AboutUsActivity extends AppCompatActivity {
         itemIconSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),HomepageActivity.class));
+                startActivity(new Intent(getApplicationContext(),HistoryActivity.class));
             }
         });
 
@@ -135,5 +135,12 @@ public class AboutUsActivity extends AppCompatActivity {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(tv);
+    }
+    @Override
+    public void onBackPressed() {
+        //Override to re-direct them back to the homepage activity
+        Intent intent = new Intent(AboutUsActivity.this, HomepageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }

@@ -90,7 +90,7 @@ public class ReportActivity extends AppCompatActivity {
         itemIconSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ReportActivity.this,HomepageActivity.class));
+                startActivity(new Intent(ReportActivity.this,HistoryActivity.class));
             }
         });
 
@@ -142,24 +142,7 @@ public class ReportActivity extends AppCompatActivity {
 
     public void sendEmail() {
         String content = etContent.getText().toString().trim();
-//        SharePrefManager manager = SharePrefManager.getInstance(getApplicationContext());
-//        String emailFromSender = manager.getEmail();
-//        String carplate = manager.getCarPlate();
-//        //Adding message
-//        Spanned spanned = Html.fromHtml("Carplate : " + carplate + "<br/>" + "Email : " + emailFromSender + "<br/>" + "Content : " + content);
-//        GMailSender sender = new GMailSender(EndPoints.USER_EMAIL, EndPoints.PASSWORD_EMAIL);
-//        try {
-//            sender.sendMail("Report From "+emailFromSender,
-//                    spanned.toString(),
-//                    EndPoints.USER_EMAIL,
-//                    "doublepark1018@gmail.com");
-//        } catch (Exception e) {
-//            Log.e("SendMail", e.getMessage(), e);
-//        }
-//        SendEmail email = new SendEmail(ReportActivity.this,content);
-//        email.execute();
-
-        //Using intent first
+       //Using intent first
 
         Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
@@ -190,6 +173,12 @@ public class ReportActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(tv);
     }
-
+    @Override
+    public void onBackPressed() {
+        //Override to re-direct them back to the homepage activity
+        Intent intent = new Intent(ReportActivity.this, HomepageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 
 }

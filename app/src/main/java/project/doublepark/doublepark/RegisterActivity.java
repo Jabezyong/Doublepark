@@ -168,6 +168,7 @@ public class RegisterActivity extends AppCompatActivity {
         Toast.makeText(RegisterActivity.this,"Registered Successful",Toast.LENGTH_SHORT).show();
         finish();
         Intent intent = new Intent(RegisterActivity.this, HomepageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 

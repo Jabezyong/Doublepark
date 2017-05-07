@@ -371,5 +371,11 @@ public class HistoryActivity extends AppCompatActivity {
                 .attachTo(actionButton)
                 .build();
     }
-
+    @Override
+    public void onBackPressed() {
+        //Override to re-direct them back to the homepage activity
+        Intent intent = new Intent(HistoryActivity.this, HomepageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 }
