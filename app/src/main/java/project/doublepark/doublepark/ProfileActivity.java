@@ -246,8 +246,11 @@ public class ProfileActivity extends AppCompatActivity {
                                 String name = editTextName.getText().toString();
 
                                 firebaseDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("name").setValue(name);
-
+                                manager.saveName(name);
                                 manager.saveContactList(contactNum);
+
+                                Toast.makeText(getApplicationContext(),"Updated profile", Toast.LENGTH_SHORT).show();
+
                                 if(flag){
                                     profilePicture.buildDrawingCache();
                                     mAsynTask = new UpdateProfilePicTask(profilePicture.getDrawingCache(),ProfileActivity.this);

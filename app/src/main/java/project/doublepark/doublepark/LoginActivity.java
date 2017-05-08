@@ -102,6 +102,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     //progress dialog
     private ProgressDialog progressDialog;
     TextView mSignupLink;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
             //close this activity
-            finish();
+
             //opening profile activity
             startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
         }

@@ -25,6 +25,14 @@
         android:layout_gravity="center"
         android:adjustViewBounds="false"
         android:src="@drawable/ic_profile_gray"/>
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,6 +82,8 @@
         android:paddingLeft="6dp"
         android:hint="@string/register_email"/>
 
+    </LinearLayout>
+
     <!--<TextView-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
@@ -83,9 +93,10 @@
         <!--android:layout_marginLeft="15dp"-->
         <!--android:layout_marginRight="15dp"/>-->
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -95,34 +106,38 @@
             android:id="@+id/spinner_contact_no"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginRight="15dp"
+
             />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="75dp"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:gravity="center"
+
         >
+
         <Button
             android:id="@+id/button_add_contact"
             android:layout_width="150dp"
             android:layout_height="35dp"
-            android:background="@drawable/rounded_button"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/rounded_button"
             android:text="@string/action_add_contact"/>
 
         <Button
             android:id="@+id/button_update_profile"
             android:layout_width="150dp"
             android:layout_height="35dp"
-            android:background="@drawable/rounded_button"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/rounded_button"
             android:text="@string/action_update_profile"/>
     </LinearLayout>
     <Button
