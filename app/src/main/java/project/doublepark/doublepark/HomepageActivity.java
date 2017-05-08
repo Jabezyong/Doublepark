@@ -103,6 +103,7 @@ public class HomepageActivity extends AppCompatActivity {
                             UserInformation user = snapshot.getValue(UserInformation.class);
                             //Check if the user's car plate number matches the input car plate number
                             String carPlateNumber = editTextCarPlate.getText().toString();
+                            carPlateNumber = carPlateNumber.replace(" ","");
                             carPlateNumber = carPlateNumber.toUpperCase();
 
                             if(user.carPlate.equals(carPlateNumber)) {
@@ -272,13 +273,20 @@ public class HomepageActivity extends AppCompatActivity {
 
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        moveTaskToBack(true);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(1);
 
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
+
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);
+
+
+
     }
 }

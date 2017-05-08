@@ -104,7 +104,7 @@ public class CountdownActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-                startActivity(new Intent(CountdownActivity.this,FloatingButtonActivity.class));
+                startActivity(new Intent(CountdownActivity.this,HomepageActivity.class));
             }
         });
 
