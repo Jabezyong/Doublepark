@@ -235,7 +235,7 @@ public class RegisterActivity extends AppCompatActivity {
 //                        progressDialog.dismiss();
                         try {
                             JSONObject obj = new JSONObject(response);
-//                            Toast.makeText(HomepageActivity.this, obj.getString("message"), Toast.LENGTH_LONG).show();
+//                            Toast.makeText(RegisterActivity.this, obj.getString("message"), Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

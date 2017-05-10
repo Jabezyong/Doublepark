@@ -173,13 +173,23 @@ public class CountdownActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         if(listener != null){
             myRef.removeEventListener(listener);
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
     private void setupFontForTitle() {
         TextView tv = new TextView(getApplicationContext());
 

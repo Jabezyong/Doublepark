@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
             //close this activity
-
+            finish();
             //opening profile activity
             startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
         }
