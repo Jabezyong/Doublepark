@@ -12,28 +12,28 @@
         android:text="@string/report"
         android:gravity="center"
     />
-    <!--<EditText-->
-        <!--android:id="@+id/editTextReport"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:layout_marginLeft="15dp"-->
-        <!--android:layout_marginRight="15dp"-->
-        <!--android:paddingLeft="3dp"-->
-        <!--android:lines="8"-->
-        <!--android:minLines="4"-->
-        <!--android:gravity="top|left"-->
-        <!--android:background="@drawable/box_edittext"-->
-        <!--android:scrollbars="vertical"-->
-    <!--/>-->
+    <EditText
+        android:id="@+id/editTextReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:paddingLeft="3dp"
+        android:lines="8"
+        android:minLines="4"
+        android:gravity="top|left"
+        android:background="@drawable/box_edittext"
+        android:scrollbars="vertical"
+    />
 
-    <!--<Button-->
-        <!--android:id="@+id/button_send_report"-->
-        <!--android:layout_marginTop="15dp"-->
-        <!--android:layout_width="150dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/action_send"-->
-        <!--android:background="@drawable/rounded_button"-->
-        <!--/>-->
+    <Button
+        android:id="@+id/button_send_report"
+        android:layout_marginTop="15dp"
+        android:layout_width="150dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:text="@string/action_send"
+        android:background="@drawable/rounded_button"
+        />
 </LinearLayout>

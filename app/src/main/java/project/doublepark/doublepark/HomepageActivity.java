@@ -44,12 +44,21 @@ public class HomepageActivity extends AppCompatActivity {
     Intent intent;
     private ProgressDialog progressDialog;
     AdView adView;
+    private FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
         //update token every time. to ensure it is active.
 //        updateToken();
+        firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() == null) {
+            //close this activity
+            finish();
+            //opening profile activity
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        }
         setupFloatingButton();
         setupFontForTitle();
         progressDialog = new ProgressDialog(HomepageActivity.this);
@@ -57,7 +66,6 @@ public class HomepageActivity extends AppCompatActivity {
         enterBtn = (Button) findViewById(R.id.buttonFindCarOwner);
         adView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("5AAF75E33FCD2FCD8081C82F5481AA1B")
                 .build();
         adView.loadAd(adRequest);
         enterBtn.setOnClickListener(new View.OnClickListener() {

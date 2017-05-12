@@ -36,15 +36,14 @@ public class ReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-        //they canceled it. check original layout on activity xml file.
-//        etContent = (EditText) findViewById(R.id.editTextReport);
-//        btnSend = (Button) findViewById(R.id.button_send_report);
-//        btnSend.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                sendEmail();
-//            }
-//        });
+        etContent = (EditText) findViewById(R.id.editTextReport);
+        btnSend = (Button) findViewById(R.id.button_send_report);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmail();
+            }
+        });
         setupFloatingButton();
         setupFontForTitle();
     }

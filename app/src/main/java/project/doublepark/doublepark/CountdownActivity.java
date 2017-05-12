@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -33,11 +34,11 @@ public class CountdownActivity extends AppCompatActivity {
     FirebaseDatabase database  = FirebaseDatabase.getInstance();
     String key;
     String phone;
-    boolean firstTime = true;
     boolean firstNotification = true;
     String carPlateNum;
     Context mCtx;
     boolean isFirstTime = true;
+    boolean receiveNotification = false;
     ChildEventListener listener;
     DatabaseReference myRef;
     @Override
@@ -47,7 +48,6 @@ public class CountdownActivity extends AppCompatActivity {
 
         final CountdownView countdownView = (CountdownView) findViewById(R.id.countdownView);
         countdownView.start(300000); //5 minutes in millisecond
-        firstTime = true;
         firstNotification = true;
         //Get the car plate number and owner name from previous activity
 //        carPlateNum = getIntent().getStringExtra("CAR_PLATE_NUMBER");
@@ -62,7 +62,7 @@ public class CountdownActivity extends AppCompatActivity {
         txtViewNotified = (TextView) findViewById(R.id.textView_notified);
         txtViewName = (TextView) findViewById(R.id.textView_Notify_CarOwnerName);
         txtViewName.setText(name);
-       btnNotifyAgain = (Button) findViewById(R.id.button_notify_again);
+        btnNotifyAgain = (Button) findViewById(R.id.button_notify_again);
         btnDone = (Button) findViewById(R.id.button_done);
 
         //Getting the key to send notification
@@ -119,12 +119,22 @@ public class CountdownActivity extends AppCompatActivity {
         listener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String what = s;
-                if(!firstTime) {
+                if(!isFirstTime) {
                     if (dataSnapshot.hasChildren()) {
-                        MyFirebaseNotification noti = dataSnapshot.getValue(MyFirebaseNotification.class);
-                        String tag = noti.notificationTAG;
+                        MyFirebaseNotification noti;
+                        String tag ="";
+                        try {
+                            noti = dataSnapshot.getValue(MyFirebaseNotification.class);
+                            tag = noti.notificationTAG;
+                        }catch(DatabaseException e){
+                            //there are many childs in one tree.
+                            //some of the value might not from "MyFirebaseNotification.class"
+                            //catch exception to prevent crash when come back from another activity
+                            //only get the value what we wanted.
+                            //current solution for me to solve crash when user get back from another app when got notification
+                        }
                         if (tag.equals(Tags.receiveTAG)) {
+                            receiveNotification = true;
                             txtViewNotified.setTextColor(getResources().getColor(R.color.green_notification));
                             NotificationDialog dialog = new NotificationDialog();
                             Bundle bundle = new Bundle();
@@ -135,7 +145,7 @@ public class CountdownActivity extends AppCompatActivity {
                         }
                     }
                 }else{
-                    firstTime = false;
+                    isFirstTime = false;
                 }
             }
 
@@ -156,8 +166,7 @@ public class CountdownActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        if(listener!=null)
-        myRef.addChildEventListener(listener);
+
 
 
 
@@ -183,6 +192,11 @@ public class CountdownActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        //check the status of the notification
+        //if received notification then no need listen the event again.
+        //it is to prevent crash when user receive notification and got back from another activity.
+        if( !receiveNotification && listener != null)
+            myRef.addChildEventListener(listener);
 
     }
 
@@ -206,5 +220,23 @@ public class CountdownActivity extends AppCompatActivity {
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         getSupportActionBar().setDisplayOptions(android.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(tv);
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        savedInstanceState.putBoolean("isFirstTime", isFirstTime);
+        savedInstanceState.putBoolean("receiveNotification", receiveNotification);
+    }
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+        isFirstTime = savedInstanceState.getBoolean("isFirstTime");
+        receiveNotification = savedInstanceState.getBoolean("receiveNotification");
+
     }
 }
