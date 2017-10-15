@@ -89,7 +89,7 @@ public class NotificationManager {
                 .setAutoCancel(true)
                 .setContentIntent(resultPendingIntent)
                 .setContentTitle(title)
-                .setLargeIcon(BitmapFactory.decodeResource(mCtx.getResources(),R.mipmap.ic_launcher))
+//                .setLargeIcon(BitmapFactory.decodeResource(mCtx.getResources(),R.mipmap.ic_launcher))
                 .setContentText(msg)
                 //set vibration
                 .setVibrate(new long[]{1000,1000})

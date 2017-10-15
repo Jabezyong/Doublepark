@@ -38,8 +38,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
         updateToken(refreshedToken);
-
         storeToken(refreshedToken);
+
 //        // If you want to send messages to this application instance or
 //        // manage this apps subscriptions on the server side, send the
 //        // Instance ID token to your app server.
@@ -61,6 +61,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
             FirebaseAuth.getInstance().signOut();
             return;
         }
+        saveTokenToServer(carPlate, token);
         //TO UPDATE THE Token on fireabase
         Query query = reference.child("User").orderByChild("carPlate").equalTo(carPlate);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -74,7 +75,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
                     HashMap<String, Object> result = new HashMap<>();
                     result.put("token", token);
                     reference.child(path).updateChildren(result);
-                    saveTokenToServer(carPlate, token);
+
 //                }
             }
 
@@ -110,7 +111,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put("email",carplate);
+                params.put("carplate",carplate);
                 params.put("token",token);
                 return params;
             }

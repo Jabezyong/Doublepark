@@ -43,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String title = data.getString("title");
             String message = data.getString("message");
             String imageUrl = data.getString("image");
-            String email = data.getString("carplate");
+            String carplate = data.getString("carplate");
             String key = data.getString("key");
             //creating MyNotificationManager object
             NotificationManager manager = new NotificationManager(getApplication());
@@ -51,17 +51,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             //creating an intent for the notification
             Intent intent = new Intent(getApplicationContext(),ReplyActionReceiver.class);
             Bundle bundle = new Bundle();
-            bundle.putString("carplate",email);
+            bundle.putString("carplate",carplate);
             bundle.putString("key",key);
             intent.putExtra(notificationTAG,bundle);
             //if there is no imaage
             if(imageUrl.equals("null")){
                 //display small notification
-                manager.showSmallNotification(title,message,email,intent);
+                manager.showSmallNotification(title,message,carplate,intent);
             }else{
                 //if there is a image
                 //then show big notification
-                manager.showBigNotification(title,message,imageUrl,email,intent);
+                manager.showBigNotification(title,message,imageUrl,carplate,intent);
             }
         } catch (JSONException e) {
             e.printStackTrace();
