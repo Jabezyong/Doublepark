@@ -41,6 +41,9 @@ public class NotifyOwnerActivity extends AppCompatActivity {
 
         FirebaseDatabase database  = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference().child(ReplyActionReceiver.notificationTAG);
+
+        setupFontForTitle();
+
         txtViewName = (TextView) findViewById(R.id.textViewCarOwnerName);
 
         txtViewCarPlate = (TextView) findViewById(R.id.textViewCarPlateNumber);

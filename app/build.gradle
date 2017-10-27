@@ -27,6 +27,8 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+    productFlavors {
+    }
 }
 
 dependencies {
@@ -64,5 +66,7 @@ dependencies {
     //to compatible to sdk version < 22
     compile 'com.android.support:multidex:1.0.1'
     testCompile 'junit:junit:4.12'
+    compile files('libs/mail.jar')
+    compile 'com.android.support:multidex:1.0.0'
 }
 apply plugin: 'com.google.gms.google-services'
